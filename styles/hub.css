@@ -1,0 +1,422 @@
+/* ==========================================================================
+   ESTILOS DEL HUB: LA TORRE SOMBRÍA (HUB.CSS)
+   ========================================================================== */
+
+/* Hero Banner */
+.hub-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-spectral);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  padding: 1.5rem;
+}
+
+.hero-image-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  aspect-ratio: 16 / 9;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hero-image-wrap:hover .hero-image {
+  transform: scale(1.04);
+}
+
+.hero-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10, 4, 22, 0.8) 100%);
+  pointer-events: none;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hero-tag {
+  align-self: flex-start;
+  padding: 0.35rem 0.85rem;
+  background: rgba(236, 72, 153, 0.2);
+  border: 1px solid var(--ghost-pink);
+  border-radius: 20px;
+  color: #fbcfe8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.hero-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Barra de Progreso Global */
+.hub-progress-card {
+  margin-top: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(10, 4, 22, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 16px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progress-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.progress-value {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--light-purple);
+}
+
+.progress-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9333ea, #a855f7, #ec4899);
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+}
+
+/* ==========================================================================
+   CUADRÍCULA DE SELLOS (RUNAS)
+   ========================================================================== */
+.hub-runes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.runes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.rune-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-spectral);
+  border-radius: 20px;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all var(--transition-smooth);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.rune-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+/* Estados de las Tarjetas */
+.rune-card.unlocked {
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow: 0 6px 25px rgba(168, 85, 247, 0.15);
+}
+
+.rune-card.unlocked:hover {
+  transform: translateY(-4px);
+  border-color: var(--light-purple);
+  box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+}
+
+.rune-card.unlocked::before {
+  opacity: 1;
+}
+
+.rune-card.completed {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 30, 36, 0.7);
+}
+
+.rune-card.completed::before {
+  background: linear-gradient(90deg, transparent, var(--toxic-green), transparent);
+  opacity: 1;
+}
+
+.rune-card.locked {
+  opacity: 0.55;
+  filter: grayscale(0.65);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.rune-seal-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rune-num {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--light-purple);
+  padding: 0.25rem 0.65rem;
+  background: rgba(168, 85, 247, 0.15);
+  border-radius: 8px;
+}
+
+.rune-card.completed .rune-num {
+  color: var(--toxic-green);
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.rune-status-icon {
+  font-size: 1.35rem;
+}
+
+.rune-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.rune-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.rune-type {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.btn-play-stage {
+  margin-top: auto;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--neon-purple);
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.4), rgba(168, 85, 247, 0.6));
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-play-stage:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.8), rgba(168, 85, 247, 1));
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-play-stage:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.btn-play-stage.btn-replay {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+
+.btn-play-stage.btn-replay:hover {
+  background: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* ==========================================================================
+   TARJETA DE ANTICIPO DE LA BÓVEDA
+   ========================================================================== */
+.hub-vault-preview {
+  margin-top: 1rem;
+}
+
+.vault-preview-card {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(26, 11, 48, 0.85), rgba(13, 5, 26, 0.95));
+  border: 2px dashed rgba(168, 85, 247, 0.4);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.vault-preview-card.ready-to-open {
+  border: 2px solid #ec4899;
+  box-shadow: 0 0 35px rgba(236, 72, 153, 0.45);
+  animation: pulseVaultCard 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseVaultCard {
+  0%, 100% { box-shadow: 0 0 25px rgba(236, 72, 153, 0.35); }
+  50% { box-shadow: 0 0 45px rgba(236, 72, 153, 0.7); }
+}
+
+.vault-preview-img-wrap {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+}
+
+.vault-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vault-lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  background: rgba(10, 4, 22, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+.vault-preview-card.ready-to-open .vault-lock-overlay {
+  display: none;
+}
+
+.vault-preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vault-badge {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid var(--amber-gold);
+  border-radius: 20px;
+  color: #fde68a;
+  letter-spacing: 0.08em;
+}
+
+.vault-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.vault-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.vault-btn-open {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.vault-preview-card.ready-to-open .vault-btn-open {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  border-color: #fbcfe8;
+  box-shadow: 0 6px 25px rgba(236, 72, 153, 0.6);
+  animation: bounceBtn 1.5s ease-in-out infinite;
+}
+
+@keyframes bounceBtn {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px) scale(1.03); }
+}
+
+@media (max-width: 900px) {
+  .hub-hero {
+    grid-template-columns: 1fr;
+  }
+  .vault-preview-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .vault-preview-img-wrap {
+    max-width: 220px;
+    margin: 0 auto;
+  }
+  .vault-badge, .vault-btn-open {
+    align-self: center;
+  }
+}

@@ -1,0 +1,583 @@
+/* ==========================================================================
+   SISTEMA DE DISEÑO ESPECTRAL DE GENGAR (MAIN.CSS)
+   ========================================================================== */
+
+:root {
+  /* Paleta Sombría y Neón */
+  --bg-deep: #080314;
+  --bg-card: rgba(22, 10, 42, 0.75);
+  --bg-card-hover: rgba(35, 16, 66, 0.88);
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  
+  --primary-purple: #9333ea;
+  --neon-purple: #a855f7;
+  --light-purple: #c084fc;
+  --ghost-pink: #ec4899;
+  --crimson-eye: #ef4444;
+  --toxic-green: #10b981;
+  --amber-gold: #f59e0b;
+  --ghost-cyan: #06b6d4;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  
+  /* Bordes y Resplandores */
+  --border-spectral: rgba(168, 85, 247, 0.35);
+  --border-spectral-hover: rgba(192, 132, 252, 0.7);
+  --glow-purple: 0 0 25px rgba(168, 85, 247, 0.45);
+  --glow-crimson: 0 0 20px rgba(239, 68, 68, 0.5);
+  --glow-pink: 0 0 20px rgba(236, 72, 153, 0.5);
+
+  /* Tipografías */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-arcade: 'Press Start 2P', monospace;
+
+  /* Transiciones */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset y Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(88, 28, 135, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 45%);
+  background-attachment: fixed;
+}
+
+/* Canvas de Partículas Espectrales */
+#spectral-bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Contenedor de la Aplicación */
+.app-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* ==========================================================================
+   CABECERA SUPERIOR
+   ========================================================================== */
+.spectral-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  padding: 1rem 1.5rem;
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-spectral);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.header-branding {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-avatar-wrap {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--neon-purple), var(--crimson-eye));
+}
+
+.header-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar-glow {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  background: inherit;
+  filter: blur(8px);
+  opacity: 0.6;
+  z-index: -1;
+  animation: pulseAvatar 3s ease-in-out infinite;
+}
+
+@keyframes pulseAvatar {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+
+.header-main-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  background: linear-gradient(90deg, #f8fafc, #c084fc, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.highlight-name {
+  color: #f43f5e;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(244, 63, 94, 0.6);
+}
+
+.btn-icon-subtle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.btn-icon-subtle:hover {
+  opacity: 1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.85rem;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 0.825rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-header:hover {
+  background: rgba(168, 85, 247, 0.28);
+  border-color: var(--light-purple);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Controlador de Volumen Deslizante */
+.volume-control-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+}
+
+.btn-sound-mini {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: transform var(--transition-fast);
+}
+
+.btn-sound-mini:hover {
+  transform: scale(1.15);
+}
+
+.volume-slider-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 85px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.volume-slider-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--light-purple);
+  box-shadow: 0 0 10px #c084fc;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.volume-slider-range::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  background: #ffffff;
+}
+
+.volume-slider-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--light-purple);
+  border: none;
+  box-shadow: 0 0 10px #c084fc;
+  cursor: pointer;
+}
+
+.volume-percent-text {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--light-purple);
+  min-width: 32px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.btn-header.active {
+  background: rgba(236, 72, 153, 0.3);
+  border-color: var(--ghost-pink);
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+}
+
+.btn-secret {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.btn-secret:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger-subtle {
+  padding: 0.5rem 0.65rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   CAJA DE DIÁLOGO DE GENGAR
+   ========================================================================== */
+.gengar-dialogue-section {
+  width: 100%;
+}
+
+.dialogue-box {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, rgba(30, 11, 56, 0.85), rgba(16, 7, 32, 0.9));
+  border: 1px solid var(--border-spectral);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(168, 85, 247, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.dialogue-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--crimson-eye), var(--neon-purple));
+}
+
+.dialogue-avatar {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dialogue-avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  border: 2px solid var(--neon-purple);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+  animation: floatAvatar 4s ease-in-out infinite;
+}
+
+@keyframes floatAvatar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.dialogue-name-tag {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--light-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dialogue-content {
+  flex: 1;
+}
+
+.dialogue-content p {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-style: italic;
+  font-weight: 500;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   VISTAS Y PANELES
+   ========================================================================== */
+.view-panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.view-panel.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   BOTONES ESPECTRALES GLOBALES
+   ========================================================================== */
+.btn-spectral {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  background: linear-gradient(135deg, #7e22ce, #a855f7);
+  border: 1px solid #c084fc;
+  border-radius: 14px;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+  transition: all var(--transition-smooth);
+}
+
+.btn-spectral:hover {
+  background: linear-gradient(135deg, #9333ea, #c084fc);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 28px rgba(168, 85, 247, 0.6);
+}
+
+.btn-spectral:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-spectral.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.btn-spectral.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   FOOTER Y DISPARADOR SECRETO
+   ========================================================================== */
+.spectral-footer {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(168, 85, 247, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.secret-ghost-trigger {
+  cursor: pointer;
+  opacity: 0.18;
+  font-size: 0.85rem;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  user-select: none;
+}
+
+.secret-ghost-trigger:hover {
+  opacity: 0.8;
+  transform: scale(1.3);
+}
+
+/* ==========================================================================
+   MODAL DE AUTENTICACIÓN DEL CREADOR (SQLITE BACKEND)
+   ========================================================================== */
+.creator-modal-window {
+  max-width: 520px;
+  border-color: rgba(236, 72, 153, 0.5);
+  box-shadow: 0 0 35px rgba(236, 72, 153, 0.3);
+}
+
+.creator-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.creator-modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.creator-input-group {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.creator-pwd-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: rgba(10, 4, 22, 0.8);
+  border: 1px solid var(--border-spectral);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.creator-pwd-input:focus {
+  border-color: var(--ghost-pink);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+}
+
+.creator-feedback {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.creator-feedback.success {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid var(--toxic-green);
+  color: #a7f3d0;
+}
+
+.creator-feedback.error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid var(--crimson-eye);
+  color: #fecaca;
+}
+
+.creator-actions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1rem;
+  background: rgba(16, 6, 32, 0.7);
+  border: 1px dashed var(--border-spectral);
+  border-radius: 14px;
+}
+
+.creator-authorized-text {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--toxic-green);
+  text-align: center;
+}
+
+.creator-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 768px) {
+  .spectral-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .dialogue-box {
+    flex-direction: column;
+    text-align: center;
+  }
+  .dialogue-box::before {
+    width: 100%;
+    height: 4px;
+  }
+}

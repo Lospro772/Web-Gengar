@@ -1,0 +1,904 @@
+/* ==========================================================================
+   ESTILOS DE MINIJUEGOS Y MODAL (GAMES.CSS)
+   ========================================================================== */
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 1, 10, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-window {
+  width: 100%;
+  max-width: 740px;
+  max-height: 92vh;
+  background: linear-gradient(135deg, rgba(25, 10, 48, 0.96), rgba(12, 4, 25, 0.98));
+  border: 1px solid var(--border-spectral-hover);
+  border-radius: 24px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.open .modal-window {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+  background: rgba(10, 4, 22, 0.5);
+}
+
+.modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.modal-icon {
+  font-size: 1.35rem;
+}
+
+.modal-stage-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.btn-skip {
+  padding: 0.4rem 0.8rem;
+  background: rgba(236, 72, 153, 0.15);
+  border: 1px solid rgba(236, 72, 153, 0.4);
+  border-radius: 10px;
+  color: #fbcfe8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-skip:hover {
+  background: rgba(236, 72, 153, 0.3);
+  border-color: var(--ghost-pink);
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn-close-modal:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(92vh - 75px);
+}
+
+/* ==========================================================================
+   ESTRUCTURA GENERAL DEL JUEGO (HUD E INSTRUCCIONES)
+   ========================================================================== */
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.game-hud {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1.2rem;
+  background: rgba(10, 4, 22, 0.7);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 14px;
+}
+
+.hud-item {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.hud-label {
+  color: var(--text-muted);
+  margin-right: 0.25rem;
+}
+
+.hud-val {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.hud-val.time-warn {
+  color: var(--amber-gold);
+}
+
+.status-text.wait {
+  color: var(--amber-gold);
+}
+
+.status-text.go {
+  color: var(--toxic-green);
+  animation: pulseStatus 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulseStatus {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+.game-instruction {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: -0.25rem;
+}
+
+/* Banner de Victoria de Reto */
+.stage-victory-banner {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  animation: fadeIn 0.4s ease;
+}
+
+.vic-icon {
+  font-size: 3rem;
+  animation: bounceAvatar 2s ease-in-out infinite;
+}
+
+.stage-victory-banner h2 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+}
+
+.stage-victory-banner p {
+  color: var(--text-secondary);
+  max-width: 420px;
+}
+
+.game-overlay-fail {
+  margin-top: 1rem;
+  padding: 1.25rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--crimson-eye);
+  border-radius: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+/* ==========================================================================
+   MINIJUEGO 1: WHACK-A-GENGAR
+   ========================================================================== */
+.whack-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 440px;
+  margin: 0.5rem auto;
+}
+
+.portal-hole {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(circle, #0a0316 40%, #20083c 90%);
+  border: 2px solid rgba(168, 85, 247, 0.35);
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: inset 0 6px 15px rgba(0, 0, 0, 0.9), 0 4px 15px rgba(168, 85, 247, 0.15);
+  transition: border-color var(--transition-fast);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.portal-hole:hover {
+  border-color: var(--light-purple);
+}
+
+.portal-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 2px dashed rgba(168, 85, 247, 0.25);
+  animation: rotatePortal 15s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotatePortal {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.portal-creature {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(110%);
+  transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+}
+
+.portal-creature * {
+  pointer-events: none;
+}
+
+.portal-creature.show {
+  transform: translateY(0);
+}
+
+.portal-creature.hit {
+  transform: scale(0.85);
+  filter: brightness(2);
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.portal-creature.hit-bomb {
+  transform: scale(0.8);
+  filter: saturate(3) brightness(1.5);
+  transition: transform 0.1s ease;
+}
+
+/* Mini Gengar Vector */
+.mini-gengar {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  background: #6b21a8;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
+}
+
+.g-ears {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 16px;
+}
+
+.g-ears::before, .g-ears::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.g-ears::before {
+  left: 6px;
+  border-width: 0 8px 18px 8px;
+  border-color: transparent transparent #6b21a8 transparent;
+  transform: rotate(-15deg);
+}
+
+.g-ears::after {
+  right: 6px;
+  border-width: 0 8px 18px 8px;
+  border-color: transparent transparent #6b21a8 transparent;
+  transform: rotate(15deg);
+}
+
+.g-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.g-eyes {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.g-eyes span {
+  width: 14px;
+  height: 9px;
+  background: #ef4444;
+  border-radius: 50% 50% 20% 20%;
+  box-shadow: 0 0 6px #ef4444;
+  transform: rotate(-10deg);
+}
+
+.g-eyes span:last-child {
+  transform: rotate(10deg);
+}
+
+.g-smile {
+  width: 38px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 0 0 20px 20px;
+  margin-top: 6px;
+  border: 1px solid #3b0764;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.bomb-icon {
+  font-size: 2.8rem;
+  animation: pulseBomb 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulseBomb {
+  from { transform: scale(0.9); }
+  to { transform: scale(1.1); }
+}
+
+.pop-feedback {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.85rem;
+  font-weight: 800;
+  pointer-events: none;
+  animation: floatUp 0.65s ease-out forwards;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -35px); }
+}
+
+/* ==========================================================================
+   MINIJUEGO 2: MEMORY 3D
+   ========================================================================== */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 520px;
+  perspective: 1000px;
+}
+
+.memory-card {
+  aspect-ratio: 3 / 4;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+  border-radius: 14px;
+}
+
+.memory-card.flipped .card-inner,
+.memory-card.matched .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #1f0b3b, #100522);
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.card-back-rune {
+  font-size: 1.8rem;
+  color: var(--light-purple);
+  margin-bottom: 0.25rem;
+}
+
+.card-back-text {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--neon-purple);
+}
+
+.card-front {
+  background: linear-gradient(135deg, #2e1065, #170732);
+  border: 2px solid var(--neon-purple);
+  transform: rotateY(180deg);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.35);
+}
+
+.memory-card.matched .card-front {
+  border-color: var(--toxic-green);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
+}
+
+.card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.25rem;
+}
+
+.card-name {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.card-sub {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   MINIJUEGO 3: SIMÓN DICE (HIPNOSIS)
+   ========================================================================== */
+.simon-circle-board {
+  position: relative;
+  width: 290px;
+  height: 290px;
+  margin: 1rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.simon-pad-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+}
+
+.simon-pad {
+  border: none;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.simon-pad:active {
+  transform: scale(0.95);
+}
+
+.simon-pad .pad-icon {
+  font-size: 2rem;
+}
+
+.simon-pad .pad-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* Colores de los Pads */
+.rune-purple {
+  background: #581c87;
+  border: 2px solid #a855f7;
+}
+.rune-purple.active-flash {
+  background: #c084fc;
+  box-shadow: 0 0 35px #a855f7;
+  transform: scale(1.05);
+}
+
+.rune-pink {
+  background: #831843;
+  border: 2px solid #ec4899;
+}
+.rune-pink.active-flash {
+  background: #f472b6;
+  box-shadow: 0 0 35px #ec4899;
+  transform: scale(1.05);
+}
+
+.rune-amber {
+  background: #78350f;
+  border: 2px solid #f59e0b;
+}
+.rune-amber.active-flash {
+  background: #fbbf24;
+  box-shadow: 0 0 35px #f59e0b;
+  transform: scale(1.05);
+}
+
+.rune-cyan {
+  background: #164e63;
+  border: 2px solid #06b6d4;
+}
+.rune-cyan.active-flash {
+  background: #22d3ee;
+  box-shadow: 0 0 35px #06b6d4;
+  transform: scale(1.05);
+}
+
+.simon-center-logo {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #090314;
+  border: 3px solid var(--border-spectral);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.simon-center-icon {
+  font-size: 1.5rem;
+}
+
+.simon-center-text {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--light-purple);
+}
+
+/* ==========================================================================
+   MINIJUEGO 4: FLAPPY GENGAR
+   ========================================================================== */
+.flappy-canvas-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--border-spectral);
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+#flappy-canvas,
+#banquet-canvas,
+#breakout-canvas,
+#prisms-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 620 / 420;
+  height: auto;
+}
+
+.canvas-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 4, 22, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.overlay-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.overlay-icon {
+  font-size: 3rem;
+}
+
+/* ==========================================================================
+   MINIJUEGO 5: QUIZ DE LA CRIPTA
+   ========================================================================== */
+.quiz-card {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.quiz-question-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--light-purple);
+}
+
+.quiz-question-text {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.quiz-options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.quiz-opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quiz-opt-btn:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: var(--light-purple);
+  transform: translateX(4px);
+}
+
+.opt-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(168, 85, 247, 0.2);
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--light-purple);
+}
+
+.quiz-opt-btn.correct {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: var(--toxic-green);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.quiz-opt-btn.correct .opt-letter {
+  background: var(--toxic-green);
+  color: #ffffff;
+}
+
+.quiz-opt-btn.wrong {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--crimson-eye);
+  opacity: 0.6;
+}
+
+.quiz-reaction {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.reaction-correct {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--toxic-green);
+  color: #a7f3d0;
+}
+
+.reaction-wrong {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--crimson-eye);
+  color: #fecaca;
+}
+
+/* ==========================================================================
+   MINIJUEGO 6: BOSS FINAL (RUPTURA DEL SELLO)
+   ========================================================================== */
+.boss-canvas-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--border-spectral);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#boss-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  cursor: crosshair;
+}
+
+.boss-controls-bar {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(10, 4, 22, 0.9);
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.btn-shoot {
+  width: 100%;
+  max-width: 380px;
+}
+
+/* ==========================================================================
+   MINIJUEGO 9: EL ALTAR DE LOS PRISMAS ESPECTRALES (GRAN FINAL)
+   ========================================================================== */
+.prisms-toolbar {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.inventory-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.85rem;
+  background: rgba(26, 10, 48, 0.8);
+  border: 1.5px solid rgba(168, 85, 247, 0.4);
+  border-radius: 12px;
+  color: #f1f5f9;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tool-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: var(--neon-purple);
+  transform: translateY(-2px);
+}
+
+.tool-btn.active {
+  background: rgba(236, 72, 153, 0.25);
+  border-color: var(--ghost-pink);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+  color: #ffffff;
+}
+
+.tool-badge {
+  background: var(--dark-purple);
+  padding: 0.15rem 0.45rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fbcfe8;
+  border: 1px solid rgba(236, 72, 153, 0.4);
+}
+
+.tool-remove {
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.tool-remove:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+}
+
+.tool-remove.active {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.actions-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-mini {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.prisms-help-hint {
+  width: 100%;
+  max-width: 620px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+

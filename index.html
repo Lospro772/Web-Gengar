@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Reino Sombrío de Gengar - Especial de Cumpleaños</title>
+  <meta name="description" content="Una aventura interactiva temática de Gengar con 9 minijuegos progresivos para desbloquear el regalo sorpresa de cumpleaños.">
+  <meta name="theme-color" content="#090314">
+
+  <!-- Tipografías de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/hub.css">
+  <link rel="stylesheet" href="styles/games.css">
+  <link rel="stylesheet" href="styles/vault.css">
+  <link rel="stylesheet" href="styles/intro.css">
+</head>
+<body>
+
+  <!-- PANTALLA DE ENTRADA CINEMÁTICA: EL DESPERTAR DE GENGAR -->
+  <aside id="intro-screen" class="intro-screen-overlay" aria-label="Introducción a la Torre Sombría">
+    <div class="intro-backdrop"></div>
+    <div class="intro-smoke-particles"></div>
+    
+    <button id="btn-skip-intro" class="btn-skip-intro" title="Saltar intro y entrar directo">
+      Saltar Intro ➔
+    </button>
+
+    <div class="intro-stage-content">
+      <!-- Cara Espectral de Gengar emergiendo de la oscuridad -->
+      <div class="intro-gengar-face">
+        <div class="gengar-ghost-aura"></div>
+        <div class="gengar-eyes-pair">
+          <div class="gengar-eye eye-left">
+            <div class="eye-pupil"></div>
+            <div class="eye-glow-streak"></div>
+          </div>
+          <div class="gengar-eye eye-right">
+            <div class="eye-pupil"></div>
+            <div class="eye-glow-streak"></div>
+          </div>
+        </div>
+        <!-- Sonrisa icónica siniestra de Gengar -->
+        <div class="intro-gengar-mouth">
+          <svg viewBox="0 0 200 65" class="gengar-smile-svg">
+            <path d="M 12,12 Q 100,75 188,12 Q 100,48 12,12 Z" class="smile-outline" />
+            <path d="M 32,20 L 42,35 L 54,23 L 66,39 L 78,25 L 90,43 L 100,26 L 110,43 L 122,25 L 134,39 L 146,23 L 158,35 L 168,20" class="smile-teeth-lines" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Bloque de Títulos y Bienvenida -->
+      <div class="intro-text-block">
+        <div class="intro-tag-badge">
+          <span>🎂 AVENTURA ESPECIAL DE CUMPLEAÑOS • 2026 👻</span>
+        </div>
+        <h1 class="intro-main-title">
+          <span class="intro-title-line1">EL REINO SOMBRÍO DE</span>
+          <span class="intro-title-line2 glow-gengar-title">GENGAR</span>
+        </h1>
+        <p class="intro-subtitle">
+          Gengar ha sellado tu regalo sorpresa en la Bóveda de las Sombras.
+          <br>
+          ¿Tienes lo necesario para romper los 9 sellos, <strong class="intro-name-highlight">Tuki</strong>?
+        </p>
+      </div>
+
+      <!-- Botón de Inicio con Efecto de Energía -->
+      <div class="intro-cta-wrap">
+        <button id="btn-start-adventure" class="btn-intro-portal">
+          <span class="btn-portal-glow"></span>
+          <span class="btn-portal-icon">⚡</span>
+          <span class="btn-portal-text">¡ENTRAR A LA TORRE SOMBRÍA!</span>
+          <span class="btn-portal-icon">👻</span>
+        </button>
+        <span class="intro-hint-text">🎧 Recomendado con sonido activado</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Canvas de fondo para partículas espectrales -->
+  <canvas id="spectral-bg-canvas"></canvas>
+
+  <div class="app-container">
+
+    <!-- Barra de Navegación y Cabecera Superior -->
+    <header class="spectral-header">
+      <div class="header-branding">
+        <div class="header-avatar-wrap" id="header-avatar-secret-trigger" title="Gengar te observa..." style="cursor: pointer;">
+          <img src="assets/gengar_avatar.jpg" alt="Gengar Avatar" class="header-avatar-img">
+          <div class="avatar-glow"></div>
+        </div>
+        <div class="header-titles">
+          <h1 class="header-main-title">EL REINO SOMBRÍO DE GENGAR</h1>
+          <p class="header-subtitle">
+            Misión Especial de Cumpleaños para: 
+            <span id="header-friend-name" class="highlight-name">Tuki</span>
+            <button id="btn-edit-friend-name" class="btn-icon-subtle" title="Editar nombre del cumpleañero">✏️</button>
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Botón para revivir la Intro Cinemática -->
+        <button id="btn-replay-intro" class="btn-header" title="Ver de nuevo la animación de bienvenida">
+          🎬 <span class="btn-label">Intro</span>
+        </button>
+        <!-- Controlador de Volumen Gradual -->
+        <div class="volume-control-box" title="Ajustar volumen del juego">
+          <button id="btn-sound-toggle" class="btn-sound-mini" title="Silenciar / Activar sonido">🔊</button>
+          <input type="range" id="volume-slider" min="0" max="100" value="60" class="volume-slider-range" title="Controlador de volumen">
+          <span id="volume-percent-label" class="volume-percent-text">60%</span>
+        </div>
+        <button id="btn-music-toggle" class="btn-header" title="Música ambiental espectral">
+          🎵 <span class="btn-label">Música</span>
+        </button>
+        <button id="btn-reset-progress" class="btn-header btn-danger-subtle" title="Reiniciar progreso">
+          🔄
+        </button>
+      </div>
+    </header>
+
+    <!-- Caja de Diálogo Animada de Gengar -->
+    <section class="gengar-dialogue-section" aria-label="Diálogos de Gengar">
+      <div class="dialogue-box">
+        <div class="dialogue-avatar">
+          <img src="assets/gengar_avatar.jpg" alt="Gengar sonriendo">
+          <span class="dialogue-name-tag">Gengar 😈</span>
+        </div>
+        <div class="dialogue-content">
+          <p id="gengar-dialogue-text">¡Cargando los misterios espectrales de tu cumpleaños...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA PRINCIPAL: HUB / LA TORRE SOMBRÍA -->
+    <main id="hub-view" class="view-panel active">
+
+      <!-- Hero Banner -->
+      <section class="hub-hero">
+        <div class="hero-image-wrap">
+          <img src="assets/gengar_hero.jpg" alt="Gengar Birthday Feast" class="hero-image">
+          <div class="hero-overlay-gradient"></div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-tag">🎂 AVENTURA DE CUMPLEAÑOS 👻</div>
+          <h2 class="hero-headline">Supera las 9 Pruebas para Desbloquear tu Regalo</h2>
+          <p class="hero-desc">
+            Gengar ha sellado tu regalo sorpresa en la Bóveda de las Sombras. Derrota a cada espectro, resuelve los enigmas y rompe los 9 sellos rúnicos para desbloquear la siguiente gran sorpresa.
+          </p>
+
+          <!-- Barra de Progreso Global -->
+          <div class="hub-progress-card">
+            <div class="progress-info">
+              <span class="progress-title">PROGRESO DEL CANDADO ESPECTRAL:</span>
+              <span id="hub-progress-label" class="progress-value">0 / 9 Sellos Rotos (0%)</span>
+            </div>
+            <div class="progress-track">
+              <div id="hub-progress-fill" class="progress-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cuadrícula de los 6 Retos / Sellos -->
+      <section class="hub-runes-section">
+        <div class="section-header">
+          <h3 class="section-title">🔮 Los 9 Sellos de la Torre</h3>
+          <p class="section-subtitle">Completa cada reto en orden para debilitar el candado supremo</p>
+        </div>
+
+        <div id="runes-grid" class="runes-grid">
+          <!-- Las tarjetas de los sellos se generan dinámicamente con gameManager.js -->
+        </div>
+      </section>
+
+      <!-- Tarjeta de Anticipo de la Bóveda -->
+      <section class="hub-vault-preview">
+        <div id="vault-preview-card" class="vault-preview-card">
+          <div class="vault-preview-img-wrap">
+            <img src="assets/gengar_vault_locked.jpg" alt="Cofre cerrado con cadenas mágicas" class="vault-preview-img">
+            <div class="vault-lock-overlay">🔒</div>
+          </div>
+          <div class="vault-preview-info">
+            <span class="vault-badge">EL TESORO FINAL</span>
+            <h3 class="vault-title">La Bóveda del Regalo Sorpresa</h3>
+            <p class="vault-desc">
+              Contiene tu felicitación personalizada, fuegos artificiales espectrales y el desbloqueo de la siguiente sorpresa secreta que tus amigos han preparado para ti.
+            </p>
+            <button id="btn-hub-open-vault" class="btn-spectral vault-btn-open">
+              🔒 Requiere los 9 Sellos (0/9)
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- VISTA FINAL: LA BÓVEDA DEL REGALO SORPRESA -->
+    <section id="vault-view" class="view-panel">
+      <div class="vault-celebration-container">
+
+        <!-- Encabezado Triunfal -->
+        <div class="vault-header">
+          <div class="vault-celebration-badge">🎉 ¡DESAFÍO COMPLETADO! 🎂</div>
+          <h2 class="vault-main-title">
+            ¡FELIZ CUMPLEAÑOS, <span id="vault-friend-name" class="glow-text">TUKI</span>!
+          </h2>
+          <p class="vault-congrats-sub">¡Has quebrado todos los sellos de Gengar y abierto la Bóveda Secreta!</p>
+        </div>
+
+        <!-- Imagen del Cofre Abierto con Gengar Festivo -->
+        <div class="vault-chest-showcase">
+          <div class="chest-img-wrap">
+            <img src="assets/gengar_vault_open.jpg" alt="Cofre del tesoro abierto con Gengar y pastel de cumpleaños" class="chest-open-img">
+            <div class="chest-magical-glow"></div>
+          </div>
+        </div>
+
+        <!-- Tarjeta Espectral de la Siguiente Sorpresa -->
+        <div class="vault-surprise-section">
+          <div class="surprise-frame-gengar">
+            <div class="surprise-frame-top">
+              <span class="v-dot"></span>
+              <span class="v-dot"></span>
+              <span class="v-dot"></span>
+              <span class="surprise-title-tag" id="vault-surprise-badge">🎁 SIGUIENTE SORPRESA DESBLOQUEADA</span>
+            </div>
+
+            <!-- Contenido Principal del Desbloqueo -->
+            <div class="surprise-content-body">
+              <div class="surprise-header-visual">
+                <div class="surprise-icon-aura">
+                  <span class="surprise-big-icon">🎁✨</span>
+                  <div class="surprise-aura-pulse"></div>
+                </div>
+                <h3 class="surprise-card-title" id="vault-surprise-title">
+                  ¡HAS DESBLOQUEADO LA SIGUIENTE SORPRESA!
+                </h3>
+                <p class="surprise-card-subtitle" id="vault-surprise-subtitle">
+                  Has roto todos los sellos de la Torre Sombría... pero la aventura continúa fuera de la pantalla.
+                </p>
+              </div>
+
+              <!-- Mensajes explicativos inyectados desde config.js -->
+              <div class="surprise-messages-container" id="vault-surprise-messages"></div>
+
+              <!-- Botón interactivo para reclamar la sorpresa -->
+              <div class="surprise-claim-actions">
+                <button id="btn-claim-surprise" class="btn-spectral btn-claim-surprise">
+                  <span class="btn-claim-icon">📣</span>
+                  <span id="btn-claim-text">¡Avisar a mis Amigos para Recibir el Video!</span>
+                  <span class="btn-claim-sparkle">✨</span>
+                </button>
+                <p class="surprise-claim-hint">
+                  😈 Gengar susurra: <em>¡Ve y diles que has completado el 100% de la web para que te entreguen el video!</em>
+                </p>
+              </div>
+
+              <!-- Banner de confirmación y código secreto de canje -->
+              <div id="surprise-claimed-banner" class="surprise-claimed-banner" style="display: none;">
+                <div class="claimed-banner-glow"></div>
+                <div class="claimed-banner-content">
+                  <div class="claimed-badge">⚡ TRANSMISIÓN ESPECTRAL ACTIVADA ⚡</div>
+                  <h4 class="claimed-alert-title">🎉 ¡Pide tu sorpresa ahora mismo! 🎂</h4>
+                  <p id="claimed-alert-text" class="claimed-alert-text">
+                    Gengar ha alertado a tus amigos. Diles este código secreto para canjear tu video sorpresa:
+                  </p>
+                  <div class="claimed-code-wrapper">
+                    <span class="claimed-code-lbl">CÓDIGO SECRETO:</span>
+                    <span id="vault-secret-code" class="claimed-code-value">TUKI-SOMBRA-2026</span>
+                    <button id="btn-copy-secret-code" class="btn-copy-code" title="Copiar código al portapapeles">
+                      📋 <span id="copy-btn-label">Copiar</span>
+                    </button>
+                  </div>
+                  <div id="code-copy-toast" class="code-copy-toast" style="display: none;">
+                    ✅ ¡Código copiado! Pásaselo a tus amigos.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Rincón de la Tarta Espectral de Tuki -->
+        <div class="vault-cake-section">
+          <div class="cake-card">
+            <h3 class="cake-title">🎂 La Tarta Espectral de Tuki</h3>
+            <p class="cake-subtitle">Gengar preparó un pastel mágico con velas de fuego fatuo. ¡Haz clic para soplar!</p>
+            
+            <div class="interactive-cake" id="interactive-cake">
+              <div class="cake-candles-row" id="cake-candles-row">
+                <div class="cake-candle" data-candle="1">
+                  <div class="candle-flame"></div>
+                  <div class="candle-wick"></div>
+                  <div class="candle-stick stick-1"></div>
+                </div>
+                <div class="cake-candle" data-candle="2">
+                  <div class="candle-flame"></div>
+                  <div class="candle-wick"></div>
+                  <div class="candle-stick stick-2"></div>
+                </div>
+                <div class="cake-candle" data-candle="3">
+                  <div class="candle-flame"></div>
+                  <div class="candle-wick"></div>
+                  <div class="candle-stick stick-3"></div>
+                </div>
+              </div>
+              <div class="cake-top-layer">
+                <span class="frosting-drop"></span>
+                <span class="frosting-drop"></span>
+                <span class="frosting-drop"></span>
+                <span class="frosting-drop"></span>
+              </div>
+              <div class="cake-base-layer">
+                <div class="cake-badge-tag">TUKI 🎂 2026</div>
+              </div>
+            </div>
+
+            <div class="cake-controls">
+              <button id="btn-blow-candles" class="btn-spectral">
+                💨 ¡Pedir un Deseo y Soplar las Velas!
+              </button>
+            </div>
+            <div id="cake-wish-banner" class="cake-wish-banner" style="display: none;">
+              ✨ ¡Deseo de Tuki enviado al Mundo Distorsión! ¡Que todos tus sueños se cumplan este año! 👻🎉
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta Holográfica Coleccionable de Tuki -->
+        <div class="vault-trainer-card-section">
+          <div class="trainer-card-wrapper">
+            <div class="trainer-card" id="holographic-trainer-card">
+              <div class="card-holo-shine" id="card-holo-shine"></div>
+              <div class="tcard-header">
+                <span class="tcard-badge">ENTRENADOR OFICIAL #0094</span>
+                <span class="tcard-region">REGIÓN DE KANTO</span>
+              </div>
+              <div class="tcard-body">
+                <div class="tcard-photo-wrap">
+                  <img src="assets/gengar_avatar.jpg" alt="Avatar Gengar" class="tcard-photo">
+                  <span class="tcard-pokemon-tag">Gengar 😈</span>
+                </div>
+                <div class="tcard-details">
+                  <h3 class="tcard-name">TUKI</h3>
+                  <div class="tcard-stat"><span class="tcard-lbl">RANGO:</span> Maestro Espectral</div>
+                  <div class="tcard-stat"><span class="tcard-lbl">MISIÓN:</span> Torre Sombría</div>
+                  <div class="tcard-stat"><span class="tcard-lbl">SELLOS ROTOS:</span> 9 / 9 (100%)</div>
+                  <div class="tcard-medals">
+                    <span title="Sello #1: Atrapa a Gengar" class="tcard-medal">⚡</span>
+                    <span title="Sello #2: Memoria del Más Allá" class="tcard-medal">👁️</span>
+                    <span title="Sello #3: Hipnosis de Ritmo" class="tcard-medal">🔮</span>
+                    <span title="Sello #4: Flappy Gengar" class="tcard-medal">🦇</span>
+                    <span title="Sello #5: El Banquete Come-Sueños" class="tcard-medal">🍰</span>
+                    <span title="Sello #6: Rebote Espectral" class="tcard-medal">🧱</span>
+                    <span title="Sello #7: El Quiz de la Cripta" class="tcard-medal">📜</span>
+                    <span title="Sello #8: Boss Final" class="tcard-medal">👑</span>
+                    <span title="Sello #9: Altar de los Prismas" class="tcard-medal">🗝️</span>
+                  </div>
+                </div>
+              </div>
+              <div class="tcard-footer">
+                <span>CERTIFICADO DE CUMPLEAÑOS</span>
+                <span class="tcard-code">TUKI-GENGAR-2026</span>
+              </div>
+            </div>
+            <button id="btn-download-trainer-card" class="btn-spectral btn-secondary btn-card-download">
+              📥 Guardar Tarjeta de Recuerdo
+            </button>
+          </div>
+        </div>
+
+        <!-- Carta / Pergamino de Felicitación -->
+        <div class="vault-letter-card">
+          <div class="letter-seal">👻</div>
+          <h3 id="vault-letter-title" class="letter-title">¡FELIZ CUMPLEAÑOS, TUKI!</h3>
+          <h4 id="vault-letter-subtitle" class="letter-subtitle">Has conquistado la Torre Sombría</h4>
+          <div id="vault-letter-body" class="letter-body">
+            <!-- Párrafos inyectados desde config.js -->
+          </div>
+          <div id="vault-letter-signature" class="letter-signature">
+            Con mucho cariño, tus amigos
+          </div>
+        </div>
+
+        <!-- Acciones Finales -->
+        <div class="vault-actions-bar">
+          <button id="btn-return-hub" class="btn-spectral btn-secondary">
+            🏰 Volver a la Torre (Minijuegos)
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MODAL PARA LOS MINIJUEGOS -->
+    <div id="game-modal" class="modal-overlay">
+      <div class="modal-window">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🎮</span>
+            <h3 id="modal-stage-title" class="modal-stage-title">RETO EN CURSO</h3>
+          </div>
+          <div class="modal-actions">
+            <button id="btn-close-modal" class="btn-close-modal" title="Cerrar y volver a la torre">
+              ✖
+            </button>
+          </div>
+        </div>
+
+        <!-- Contenedor dinámico del juego -->
+        <div id="game-arena-content" class="modal-body">
+          <!-- Aquí se monta el juego actual -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL SECRETO DEL CREADOR (PROTEGIDO POR SQLITE LOCAL) -->
+    <div id="creator-auth-modal" class="modal-overlay">
+      <div class="modal-window creator-modal-window">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🔒</span>
+            <h3 class="modal-stage-title">SELLO SECRETO DEL CREADOR</h3>
+          </div>
+          <button id="btn-close-creator-modal" class="btn-close-modal">✖</button>
+        </div>
+        <div class="modal-body creator-modal-body">
+          <p class="creator-modal-desc">
+            Esta torre está blindada. Para forzar un desbloqueo manual, introduce la contraseña maestra protegida en la base de datos local SQLite:
+          </p>
+          <div class="creator-input-group">
+            <input type="password" id="creator-password-input" class="creator-pwd-input" placeholder="Contraseña maestra..." autocomplete="off">
+            <button id="btn-verify-creator-pwd" class="btn-spectral">Verificar Llave</button>
+          </div>
+          <div id="creator-auth-feedback" class="creator-feedback" style="display: none;"></div>
+          <div id="creator-actions-panel" class="creator-actions-panel" style="display: none;">
+            <p class="creator-authorized-text">✅ ¡Acceso Maestro Concedido desde SQLite!</p>
+            <div class="creator-btns">
+              <button id="btn-creator-unlock-current" class="btn-spectral btn-secondary">Completar Sello Actual</button>
+              <button id="btn-creator-unlock-all" class="btn-spectral">🔓 Desbloquear Bóveda Total</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="spectral-footer">
+      <p>
+        Diseñado con espíritu Pokémon &copy; 2026 • Torre Sombría de Gengar Especial Cumpleaños
+        <span id="secret-footer-trigger" class="secret-ghost-trigger" title="El ojo de Gengar...">👁️</span>
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- Scripts en orden de dependencia -->
+  <script src="js/config.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/games/game1-whack.js"></script>
+  <script src="js/games/game2-memory.js"></script>
+  <script src="js/games/game3-simon.js"></script>
+  <script src="js/games/game4-flappy.js"></script>
+  <script src="js/games/game5-banquet.js"></script>
+  <script src="js/games/game6-breakout.js"></script>
+  <script src="js/games/game5-quiz.js"></script>
+  <script src="js/games/game6-boss.js"></script>
+  <script src="js/games/game9-prisms.js"></script>
+  <script src="js/gameManager.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+/* ==========================================================================
+   ANIMACIÓN DE ENTRADA CINEMÁTICA: EL DESPERTAR DE GENGAR (INTRO.CSS)
+   ========================================================================== */
+
+.intro-screen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: radial-gradient(circle at center, #1b0736 0%, #0d031c 60%, #05010a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1), transform 0.85s cubic-bezier(0.4, 0, 0.2, 1), filter 0.85s ease;
+}
+
+/* Efecto de niebla / humo espectral de fondo */
+.intro-backdrop {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(112, 26, 117, 0.2) 0%, transparent 60%);
+  filter: blur(40px);
+  animation: introBackdropPulse 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes introBackdropPulse {
+  0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+  100% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+}
+
+/* Partículas de niebla flotante */
+.intro-smoke-particles {
+  position: absolute;
+  inset: -50%;
+  background-image: radial-gradient(2px 2px at 20px 30px, #c084fc, rgba(0,0,0,0)),
+                    radial-gradient(2px 2px at 40px 70px, #ec4899, rgba(0,0,0,0)),
+                    radial-gradient(3px 3px at 80px 120px, #fde68a, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.35;
+  animation: introSmokeDrift 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes introSmokeDrift {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-200px) rotate(15deg); }
+}
+
+/* Botón discreto para saltar la intro */
+.btn-skip-intro {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+  opacity: 0;
+  animation: fadeInSkip 1s ease 2s forwards;
+}
+
+.btn-skip-intro:hover {
+  background: rgba(168, 85, 247, 0.25);
+  border-color: #fbcfe8;
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+@keyframes fadeInSkip {
+  to { opacity: 0.85; }
+}
+
+/* Contenedor central del escenario cinemático */
+.intro-stage-content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 680px;
+  padding: 2rem 1.5rem;
+  gap: 1.75rem;
+}
+
+/* ==========================================================================
+   CARA ESPECTRAL DE GENGAR (OJOS ROJOS Y SONRISA ILUMINADA)
+   ========================================================================== */
+.intro-gengar-face {
+  position: relative;
+  width: 220px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gengar-ghost-aura {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(112, 26, 117, 0.15) 50%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(25px);
+  opacity: 0;
+  animation: auraAwaken 2.5s ease 0.4s forwards;
+  pointer-events: none;
+}
+
+@keyframes auraAwaken {
+  0% { transform: scale(0.6); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 0.45; }
+}
+
+/* Pareja de ojos rojos */
+.gengar-eyes-pair {
+  display: flex;
+  gap: 58px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  z-index: 2;
+}
+
+.gengar-eye {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background: radial-gradient(ellipse at center, #ff1a40 20%, #b91c1c 65%, #450a0a 100%);
+  border-radius: 60% 40% 60% 40% / 70% 30% 70% 30%;
+  box-shadow: 0 0 25px #ff1a40, 0 0 50px rgba(239, 68, 68, 0.7);
+  opacity: 0;
+  transform: scaleY(0.1) scaleX(0.7);
+  animation: eyesAwaken 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  overflow: hidden;
+}
+
+.gengar-eye.eye-right {
+  transform: scaleY(0.1) scaleX(-0.7);
+  animation-name: eyesAwakenRight;
+}
+
+@keyframes eyesAwaken {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.1) scaleX(0.7);
+    filter: brightness(0.2);
+  }
+  40% {
+    opacity: 0.9;
+    transform: scaleY(1.2) scaleX(1.1);
+    filter: brightness(1.6);
+  }
+  70% {
+    transform: scaleY(0.9) scaleX(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes eyesAwakenRight {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.1) scaleX(-0.7);
+    filter: brightness(0.2);
+  }
+  40% {
+    opacity: 0.9;
+    transform: scaleY(1.2) scaleX(-1.1);
+    filter: brightness(1.6);
+  }
+  70% {
+    transform: scaleY(0.9) scaleX(-0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(-1);
+    filter: brightness(1.2);
+  }
+}
+
+.eye-pupil {
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 9px;
+  height: 15px;
+  background: #1a0204;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.eye-glow-streak {
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 14px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  transform: rotate(-15deg);
+}
+
+/* Sonrisa amenazante con colmillos */
+.intro-gengar-mouth {
+  width: 150px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  animation: mouthAwaken 1.6s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+  z-index: 2;
+}
+
+@keyframes mouthAwaken {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.gengar-smile-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 12px rgba(192, 132, 252, 0.85)) drop-shadow(0 0 25px rgba(168, 85, 247, 0.4));
+}
+
+.smile-outline {
+  fill: #0d021c;
+  stroke: #c084fc;
+  stroke-width: 4;
+}
+
+.smile-teeth-lines {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ==========================================================================
+   TÍTULOS Y DEDICATORIA
+   ========================================================================== */
+.intro-text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: textEntrance 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
+}
+
+@keyframes textEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.intro-tag-badge {
+  padding: 0.4rem 1.2rem;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid var(--amber-gold, #f59e0b);
+  border-radius: 999px;
+  color: #fde68a;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.3);
+}
+
+.intro-main-title {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+}
+
+.intro-title-line1 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  color: #c084fc;
+  text-transform: uppercase;
+}
+
+.intro-title-line2 {
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+}
+
+.glow-gengar-title {
+  background: linear-gradient(135deg, #ffffff 0%, #fbcfe8 40%, #c084fc 70%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px rgba(192, 132, 252, 0.7));
+}
+
+.intro-subtitle {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  max-width: 520px;
+}
+
+.intro-name-highlight {
+  color: #fde68a;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* ==========================================================================
+   BOTÓN PORTAL DE ENTRADA (CALL TO ACTION)
+   ========================================================================== */
+.intro-cta-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: ctaEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.4s forwards;
+}
+
+@keyframes ctaEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.btn-intro-portal {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.1rem 2.4rem;
+  background: linear-gradient(135deg, #7e22ce 0%, #9333ea 50%, #db2777 100%);
+  border: 2px solid #fbcfe8;
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.6), 0 10px 30px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.btn-intro-portal:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 0 50px rgba(236, 72, 153, 0.8), 0 15px 40px rgba(0, 0, 0, 0.9);
+  border-color: #fde68a;
+}
+
+.btn-intro-portal:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-portal-glow {
+  position: absolute;
+  inset: -100%;
+  background: linear-gradient(115deg, transparent 20%, rgba(255, 255, 255, 0.35) 45%, transparent 70%);
+  animation: portalBtnShine 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes portalBtnShine {
+  0% { transform: translateX(-100%); }
+  50%, 100% { transform: translateX(100%); }
+}
+
+.btn-portal-icon {
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+.btn-portal-text {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.intro-hint-text {
+  font-size: 0.8rem;
+  color: #a855f7;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   TRANSICIÓN DE APERTURA DEL PORTAL (SALIDA DE LA INTRO)
+   ========================================================================== */
+.intro-screen-overlay.portal-active {
+  pointer-events: none;
+}
+
+.intro-screen-overlay.portal-active .intro-stage-content {
+  animation: portalStageZoom 0.9s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+@keyframes portalStageZoom {
+  0% {
+    transform: scale(1);
+    filter: blur(0);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.15);
+    filter: blur(4px) brightness(1.5);
+  }
+  100% {
+    transform: scale(2.4);
+    filter: blur(20px) brightness(2.5);
+    opacity: 0;
+  }
+}
+
+.intro-screen-overlay.portal-active .intro-gengar-eye {
+  box-shadow: 0 0 80px #ff1a40, 0 0 120px #ff1a40;
+  transform: scale(1.6);
+  filter: brightness(2);
+}
+
+.intro-screen-overlay.portal-active .intro-backdrop {
+  animation: portalBackdropFlash 0.85s ease forwards;
+}
+
+@keyframes portalBackdropFlash {
+  0% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; background: radial-gradient(circle, rgba(236, 72, 153, 0.6) 0%, rgba(168, 85, 247, 0.8) 50%, #05010a 100%); }
+  100% { opacity: 0; transform: scale(1.4); }
+}
+
+/* Ocultación final de la intro */
+.intro-screen-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   CASCADA DE ENTRADA DEL HUB PRINCIPAL
+   ========================================================================== */
+.app-container.intro-reveal .spectral-header {
+  animation: revealHeader 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.app-container.intro-reveal .gengar-dialogue-section {
+  animation: revealSection 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.app-container.intro-reveal .hub-hero {
+  animation: revealSection 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+.app-container.intro-reveal .hub-runes-section {
+  animation: revealSection 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+}
+
+@keyframes revealHeader {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes revealSection {
+  from { opacity: 0; transform: translateY(35px); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD MÓVIL
+   ========================================================================== */
+@media (max-width: 640px) {
+  .intro-title-line2 {
+    font-size: 2.3rem;
+  }
+  .intro-title-line1 {
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+  }
+  .intro-subtitle {
+    font-size: 0.95rem;
+    padding: 0 0.5rem;
+  }
+  .btn-intro-portal {
+    padding: 0.95rem 1.8rem;
+    font-size: 1rem;
+  }
+  .intro-gengar-face {
+    transform: scale(0.85);
+  }
+}
