@@ -546,20 +546,56 @@ class GameManager {
         return;
       }
 
-      try {
-        const res = await fetch('/api/verify-bypass', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: pwd })
-        });
-        const data = await res.json();
+      const verifyClientFallback = async (password) => {
+        try {
+          const salt = '64e6cca3aba9a51c11e1ed819c8a7f73';
+          const expectedHash = 'a875e9c72291106fe98e32e48b23012757f3a375145efc0ecec064cfc43b7cc1';
+          const enc = new TextEncoder();
+          const data = enc.encode(salt + password);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+          return hashHex === expectedHash;
+        } catch (e) {
+          return false;
+        }
+      };
 
-        if (data.success) {
+      try {
+        let isSuccess = false;
+        let responseMsg = '';
+
+        try {
+          const res = await fetch('/api/verify-bypass', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pwd })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            isSuccess = !!data.success;
+            responseMsg = data.message;
+          } else {
+            // Servidor estático / GitHub Pages: verificar vía Web Crypto
+            isSuccess = await verifyClientFallback(pwd);
+            responseMsg = isSuccess 
+              ? '¡Sello del Creador verificado! Acceso concedido (Modo Estático / GitHub Pages).' 
+              : '¡Contraseña incorrecta! Gengar rechaza tu intento.';
+          }
+        } catch (netErr) {
+          // Si no hay backend (GitHub Pages / offline), usar fallback criptográfico
+          isSuccess = await verifyClientFallback(pwd);
+          responseMsg = isSuccess 
+            ? '¡Sello del Creador verificado! Acceso concedido (Modo Estático / GitHub Pages).' 
+            : '¡Contraseña incorrecta! Gengar rechaza tu intento.';
+        }
+
+        if (isSuccess) {
           window.spectralAudio.playMatchSuccess();
           if (feedback) {
             feedback.style.display = 'block';
             feedback.className = 'creator-feedback success';
-            feedback.textContent = data.message;
+            feedback.textContent = responseMsg;
           }
           if (panel) panel.style.display = 'block';
         } else {
@@ -568,7 +604,7 @@ class GameManager {
           if (feedback) {
             feedback.style.display = 'block';
             feedback.className = 'creator-feedback error';
-            feedback.textContent = data.message;
+            feedback.textContent = responseMsg;
           }
           if (panel) panel.style.display = 'none';
         }
@@ -576,7 +612,7 @@ class GameManager {
         if (feedback) {
           feedback.style.display = 'block';
           feedback.className = 'creator-feedback error';
-          feedback.textContent = 'Error al conectar con la base de datos local.';
+          feedback.textContent = 'Error al validar la clave.';
         }
       }
     };
