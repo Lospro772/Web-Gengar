@@ -14,22 +14,22 @@ class Game4Flappy {
     this.isPlaying = false;
     this.isDead = false;
 
-    // Física ágil y dinámica adaptada a la velocidad aumentada
+    // Física suave y equilibrada para un control accesible y cómodo
     this.gengar = {
       x: 110,
       y: 200,
       radius: 22,
       vy: 0,
-      gravity: 0.32,    // Gravedad ágil y equilibrada
-      jump: -5.8,       // Salto reactivo para esquivar con fluidez
+      gravity: 0.27,    // Gravedad espectral suave y controlable
+      jump: -5.2,       // Impulso suave y reactivo
       rotation: 0
     };
 
     this.pillars = [];
     this.pillarTimer = 0;
-    this.pillarGap = 190;   // Hueco amplio y accesible
-    this.pillarSpeed = 2.75; // Velocidad aumentada para mayor emoción y dinamismo
-    this.trail = [];        // Estela de partículas espectrales
+    this.pillarGap = 195;    // Hueco amplio y accesible
+    this.pillarSpeed = 1.85; // Velocidad reducida (antes 2.75) para mayor disfrute y control
+    this.trail = [];         // Estela de partículas espectrales
   }
 
   start(container, onComplete) {
@@ -112,7 +112,7 @@ class Game4Flappy {
     this.isDead = false;
     this.score = 0;
     this.pillars = [];
-    this.pillarTimer = 0;
+    this.pillarTimer = 55;
     this.trail = [];
     this.gengar.y = this.canvas.height / 2;
     this.gengar.vy = this.gengar.jump;
@@ -162,7 +162,7 @@ class Game4Flappy {
 
     // Generar pilares a un ritmo dinámico y equilibrado
     this.pillarTimer++;
-    if (this.pillarTimer > 92) {
+    if (this.pillarTimer > 125) {
       this.pillarTimer = 0;
       const minH = 50;
       const maxH = this.canvas.height - this.pillarGap - minH - 25;

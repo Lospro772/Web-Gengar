@@ -217,9 +217,9 @@ class SpectralAudioEngine {
   }
 
   /** Tono para Simón */
-  playSimonTone(index) {
+  playSimonTone(index, duration = 0.42) {
     const tones = [440, 554.37, 659.25, 830.61];
-    this.playTone(tones[index] || 500, 'sine', 0.35, 0.18);
+    this.playTone(tones[index] || 500, 'sine', duration, 0.18);
   }
 
   /** Mordisco / comer dulce (Banquete Come-Sueños) */

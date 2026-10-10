@@ -10,6 +10,11 @@ class Game3Simon {
     this.round = 1;
     this.targetRounds = 4;
     this.isShowingSequence = false;
+    this.sequenceInterval = null;
+
+    // Configuración de ritmo más pausado y cómodo
+    this.stepInterval = 920;    // Intervalo entre movimientos (antes 650ms)
+    this.flashDuration = 480;   // Duración de la iluminación (antes 380ms)
 
     this.runes = [
       { name: "Bola Sombra", color: "#a855f7", icon: "🟣", class: "rune-purple" },
@@ -20,6 +25,7 @@ class Game3Simon {
   }
 
   start(container, onComplete) {
+    this.cleanup();
     this.container = container;
     this.onComplete = onComplete;
     this.sequence = [];
@@ -28,7 +34,7 @@ class Game3Simon {
     this.isShowingSequence = false;
 
     this.render();
-    setTimeout(() => this.nextRound(), 600);
+    setTimeout(() => this.nextRound(), 900);
   }
 
   render() {
@@ -86,6 +92,11 @@ class Game3Simon {
 
   playSequence() {
     this.isShowingSequence = true;
+    if (this.sequenceInterval) {
+      clearInterval(this.sequenceInterval);
+      this.sequenceInterval = null;
+    }
+
     const statusEl = document.getElementById('simon-status');
     if (statusEl) {
       statusEl.textContent = "👁️ Observa a Gengar...";
@@ -93,9 +104,10 @@ class Game3Simon {
     }
 
     let i = 0;
-    const interval = setInterval(() => {
+    this.sequenceInterval = setInterval(() => {
       if (i >= this.sequence.length) {
-        clearInterval(interval);
+        clearInterval(this.sequenceInterval);
+        this.sequenceInterval = null;
         this.isShowingSequence = false;
         if (statusEl) {
           statusEl.textContent = "👉 ¡Tu turno! Repite la secuencia";
@@ -104,26 +116,26 @@ class Game3Simon {
         return;
       }
 
-      this.flashPad(this.sequence[i]);
+      this.flashPad(this.sequence[i], this.flashDuration);
       i++;
-    }, 650);
+    }, this.stepInterval);
   }
 
-  flashPad(idx) {
+  flashPad(idx, duration = this.flashDuration) {
     const pad = document.getElementById(`simon-pad-${idx}`);
     if (!pad) return;
 
-    window.spectralAudio.playSimonTone(idx);
+    window.spectralAudio.playSimonTone(idx, duration / 1000);
     pad.classList.add('active-flash');
     setTimeout(() => {
       pad.classList.remove('active-flash');
-    }, 380);
+    }, duration);
   }
 
   handlePlayerClick(idx) {
     if (this.isShowingSequence) return;
 
-    this.flashPad(idx);
+    this.flashPad(idx, 300);
 
     if (idx === this.sequence[this.playerStep]) {
       // Paso correcto
@@ -135,13 +147,13 @@ class Game3Simon {
           window.spectralAudio.playVictoryFanfare();
           setTimeout(() => {
             if (this.onComplete) this.onComplete();
-          }, 500);
+          }, 600);
         } else {
           this.round++;
           window.spectralAudio.playMatchSuccess();
           const statusEl = document.getElementById('simon-status');
           if (statusEl) statusEl.textContent = "¡Bien hecho! Siguiente ronda...";
-          setTimeout(() => this.nextRound(), 900);
+          setTimeout(() => this.nextRound(), 1200);
         }
       }
     } else {
@@ -155,12 +167,16 @@ class Game3Simon {
 
       // Reiniciar paso actual y repetir la misma secuencia
       this.playerStep = 0;
-      setTimeout(() => this.playSequence(), 1100);
+      setTimeout(() => this.playSequence(), 1300);
     }
   }
 
   cleanup() {
     this.isShowingSequence = false;
+    if (this.sequenceInterval) {
+      clearInterval(this.sequenceInterval);
+      this.sequenceInterval = null;
+    }
   }
 }
 
